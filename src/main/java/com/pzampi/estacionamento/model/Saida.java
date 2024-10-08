@@ -23,9 +23,9 @@ public class Saida implements Serializable {
     public Saida() {
     }
 
-    public Saida(Long id, Instant moment, String placa) {
+    public Saida(Long id, String placa) {
         this.id = id;
-        this.moment = moment;
+        this.moment = Instant.now();
         this.placa = placa;
     }
 
