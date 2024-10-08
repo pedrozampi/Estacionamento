@@ -14,7 +14,6 @@ import com.pzampi.estacionamento.model.Saida;
 import com.pzampi.estacionamento.repository.EntradaRepository;
 import com.pzampi.estacionamento.repository.OficialRepository;
 import com.pzampi.estacionamento.repository.ResidenteRepository;
-import com.pzampi.estacionamento.repository.SaidaRepository;
 
 @Configuration
 @Profile("test")
@@ -24,9 +23,6 @@ public class TestConfig implements CommandLineRunner{
     private EntradaRepository entradaRepository;
 
     @Autowired
-    private SaidaRepository saidaRepository;
-
-    @Autowired
     private OficialRepository oficialRepository;
 
     @Autowired
@@ -34,18 +30,21 @@ public class TestConfig implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
+
+
         Entrada e1 = new Entrada(null, "AEH9493");
-        Saida s1 = new Saida(null, "AEH9493");
-
-        Oficial of1 = new Oficial(null, "AEH9493");
-        Residente r1 = new Residente(null, "GUT4037", null, null);
-
         entradaRepository.save(e1);
-        s1.setMoment(s1.getMoment().plus(3, ChronoUnit.HOURS));;
-        saidaRepository.save(s1);
 
-        oficialRepository.save(of1);
-        residenteRepository.save(r1);
+        Saida s1 = new Saida(null,e1);
+        s1.setMoment(s1.getMoment().plus(3, ChronoUnit.HOURS));
+        e1.setSaida(s1);
+        entradaRepository.save(e1);
+
+        //Oficial of1 = new Oficial(null, "AEH9493");
+        //Residente r1 = new Residente(null, "GUT4037", null, null);
+
+        //oficialRepository.save(of1);
+        //residenteRepository.save(r1);
     }
 
 }

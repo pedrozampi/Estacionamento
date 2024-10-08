@@ -1,12 +1,17 @@
 package com.pzampi.estacionamento.model;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.Instant;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,6 +24,12 @@ public class Entrada implements Serializable {
     private Long id;
     private Instant moment;
     private String placa;
+
+    @OneToOne(mappedBy = "entrada", cascade = CascadeType.ALL)
+    private Saida saida;
+
+    private Integer hours;
+    private Double total;
 
     public Entrada() {
     }
@@ -51,6 +62,31 @@ public class Entrada implements Serializable {
 
     public void setPlaca(String placa) {
         this.placa = placa;
+    }
+
+    public Saida getSaida() {
+        return saida;
+    }
+
+    public void setSaida(Saida saida) {
+        this.saida = saida;
+    }
+
+    public void setHours(Integer hours) {
+        this.hours = hours;
+    }
+
+    public Integer getHours() {
+        Duration res = Duration.between(moment, saida.getMoment());
+        return res.toHoursPart();
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+    public Double getTotal() {
+        if(hours!= null) return hours*0.15;
+        else return 0.0;
     }
 
     @Override

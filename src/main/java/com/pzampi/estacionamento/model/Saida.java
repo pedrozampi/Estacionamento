@@ -1,12 +1,17 @@
 package com.pzampi.estacionamento.model;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.Instant;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,15 +23,19 @@ public class Saida implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Instant moment;
-    private String placa;
+
+    @JsonIgnore
+    @OneToOne
+    @MapsId
+    private Entrada entrada;
 
     public Saida() {
     }
 
-    public Saida(Long id, String placa) {
+    public Saida(Long id, Entrada entrada) {
         this.id = id;
         this.moment = Instant.now();
-        this.placa = placa;
+        this.entrada = entrada;
     }
 
     public Long getId() {
@@ -45,13 +54,15 @@ public class Saida implements Serializable {
         this.moment = moment;
     }
 
-    public String getPlaca() {
-        return placa;
+    public Entrada getEntrada() {
+        return entrada;
     }
 
-    public void setPlaca(String placa) {
-        this.placa = placa;
+    public void setEntrada(Entrada entrada) {
+        this.entrada = entrada;
     }
+
+ 
 
     @Override
     public int hashCode() {
