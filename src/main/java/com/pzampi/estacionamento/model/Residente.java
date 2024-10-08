@@ -1,11 +1,14 @@
 package com.pzampi.estacionamento.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,17 +20,18 @@ public class Residente implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String placa;
-    private Integer tempoTotal;
-    private Double totalPagar;
+    private Integer tempoTotal = 0;
+    private Double totalPagar = 0.0;
+
+    @OneToMany(mappedBy = "residente")
+    private List<Entrada> comandas = new ArrayList<>();
 
     public Residente() {
     }
 
-    public Residente(Long id, String placa, Integer tempoTotal, Double totalPagar) {
+    public Residente(Long id, String placa) {
         this.id = id;
         this.placa = placa;
-        this.tempoTotal = tempoTotal;
-        this.totalPagar = totalPagar;
     }
 
     public Long getId() {
@@ -47,6 +51,9 @@ public class Residente implements Serializable {
     }
 
     public Integer getTempoTotal() {
+        for(Entrada e: comandas){
+            tempoTotal += e.getHours();
+        }
         return tempoTotal;
     }
 
@@ -55,11 +62,20 @@ public class Residente implements Serializable {
     }
 
     public Double getTotalPagar() {
+        for(Entrada e: comandas){
+            totalPagar += e.getTotal();
+        }
         return totalPagar;
     }
 
     public void setTotalPagar(Double totalPagar) {
         this.totalPagar = totalPagar;
+    }
+
+
+    
+    public List<Entrada> getComandas() {
+        return comandas;
     }
 
     @Override

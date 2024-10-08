@@ -30,21 +30,35 @@ public class TestConfig implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
+        Residente r1 = new Residente(null, "GUT4037");
+        residenteRepository.save(r1);
 
+        Oficial of1 = new Oficial(null, "AEH9493");
+        oficialRepository.save(of1);
 
-        Entrada e1 = new Entrada(null, "AEH9493");
+        Entrada e1 = new Entrada(null, "GUT4037");
+        e1.setResidente(r1);
         entradaRepository.save(e1);
+
+        Entrada e2 = new Entrada(null, "AEH9493");
+        e2.setOficial(of1);;
+        entradaRepository.save(e2);
 
         Saida s1 = new Saida(null,e1);
         s1.setMoment(s1.getMoment().plus(3, ChronoUnit.HOURS));
         e1.setSaida(s1);
         entradaRepository.save(e1);
 
-        //Oficial of1 = new Oficial(null, "AEH9493");
-        //Residente r1 = new Residente(null, "GUT4037", null, null);
+        Saida s2 = new Saida(null,e2);
+        s2.setMoment(s2.getMoment().plus(3, ChronoUnit.HOURS));
+        e2.setSaida(s2);
+        entradaRepository.save(e2);
 
-        //oficialRepository.save(of1);
-        //residenteRepository.save(r1);
+
+
+        
+        //entradaRepository.save(e1);
+        
     }
 
 }

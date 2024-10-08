@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -30,6 +34,17 @@ public class Entrada implements Serializable {
 
     private Integer hours;
     private Double total;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "residente_id", nullable = true)
+    private Residente residente;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "oficial_id", nullable = true)
+    private Oficial oficial;
+
 
     public Entrada() {
     }
@@ -77,15 +92,36 @@ public class Entrada implements Serializable {
     }
 
     public Integer getHours() {
+        if(oficial!=null){
+            hours = 0;
+            return hours;
+        }
         Duration res = Duration.between(moment, saida.getMoment());
         hours = res.toHoursPart();
         return hours;
+    }
+
+    public Residente getResidente() {
+        return residente;
+    }
+
+    public void setResidente(Residente residente) {
+        this.residente = residente;
+    }
+
+    public Oficial getOficial() {
+        return oficial;
+    }
+
+    public void setOficial(Oficial oficial) {
+        this.oficial = oficial;
     }
 
     public void setTotal(Double total) {
         this.total = total;
     }
     public Double getTotal() {
+        if(oficial!=null) return 0.0;
         if(hours!= null) total = hours*10.0;
         else return total;
         return total;

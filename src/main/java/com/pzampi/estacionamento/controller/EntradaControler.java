@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pzampi.estacionamento.model.Entrada;
 import com.pzampi.estacionamento.service.EntradaService;
+
 
 @RestController
 @RequestMapping(value = "/entradas")
@@ -22,4 +24,11 @@ public class EntradaControler {
         List<Entrada> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
+
+    @GetMapping("/{placa}")
+    public ResponseEntity<Entrada> findByPlaca(@PathVariable String placa) {
+        Entrada list = service.findByPlate(placa);
+        return ResponseEntity.ok().body(list);
+    }
+    
 }

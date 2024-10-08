@@ -22,4 +22,9 @@ public class EntradaService {
         Optional<Entrada> obj = repository.findById(id);
         return obj.get();
     }
+
+    public Entrada findByPlate(String placa){
+        Optional<Entrada> obj = repository.findByPlaca(placa);
+        return obj.get();
+    }
 }
