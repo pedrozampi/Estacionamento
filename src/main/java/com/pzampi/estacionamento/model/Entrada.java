@@ -78,15 +78,17 @@ public class Entrada implements Serializable {
 
     public Integer getHours() {
         Duration res = Duration.between(moment, saida.getMoment());
-        return res.toHoursPart();
+        hours = res.toHoursPart();
+        return hours;
     }
 
     public void setTotal(Double total) {
         this.total = total;
     }
     public Double getTotal() {
-        if(hours!= null) return hours*0.15;
-        else return 0.0;
+        if(hours!= null) total = hours*10.0;
+        else return total;
+        return total;
     }
 
     @Override
