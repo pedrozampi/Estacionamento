@@ -36,11 +36,11 @@ public class TestConfig implements CommandLineRunner{
         Oficial of1 = new Oficial(null, "AEH9493");
         oficialRepository.save(of1);
 
-        Entrada e1 = new Entrada(null, "GUT4037");
+        Entrada e1 = new Entrada(null, "GUT4037",null,null);
         e1.setResidente(r1);
         entradaRepository.save(e1);
 
-        Entrada e2 = new Entrada(null, "AEH9493");
+        Entrada e2 = new Entrada(null, "AEH9493",null,null);
         e2.setOficial(of1);;
         entradaRepository.save(e2);
 

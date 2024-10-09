@@ -22,4 +22,23 @@ public class ResidenteService {
         Optional<Residente> obj = repository.findById(id);
         return obj.get();
     }
+
+    public Residente insertResidente(Residente obj){
+        return obj = repository.save(obj);
+    }
+
+    public Residente update(Long id, Residente obj){
+        try{
+            Residente entity = repository.getReferenceById(id);
+            updateData(entity, obj);
+            return repository.save(entity);
+        }catch(Exception e){    
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void updateData(Residente entity, Residente obj) {
+        entity.setPlaca(obj.getPlaca());
+    }
 }

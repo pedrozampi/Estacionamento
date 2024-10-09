@@ -12,9 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -26,33 +24,31 @@ public class Entrada implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Instant moment;
+    private Instant moment = Instant.now();
     private String placa;
 
     @OneToOne(mappedBy = "entrada", cascade = CascadeType.ALL)
     private Saida saida;
 
-    private Integer hours;
-    private Double total;
+    private Integer hours = 0;
+    private Double total = 0.0;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "residente_id", nullable = true)
     private Residente residente;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "oficial_id", nullable = true)
     private Oficial oficial;
 
-
     public Entrada() {
     }
 
-    public Entrada(Long id, String placa) {
+    public Entrada(Long id, String placa, Residente residente, Oficial oficial) {
         this.id = id;
-        this.moment = Instant.now();
         this.placa = placa;
+        this.residente = residente;
+        this.oficial = oficial;
     }
 
     public Long getId() {
@@ -92,15 +88,19 @@ public class Entrada implements Serializable {
     }
 
     public Integer getHours() {
-        if(oficial!=null){
-            hours = 0;
+        if (saida != null) {
+            if (oficial != null) {
+                hours = 0;
+                return hours;
+            }
+            Duration res = Duration.between(moment, saida.getMoment());
+            hours = res.toHoursPart();
             return hours;
         }
-        Duration res = Duration.between(moment, saida.getMoment());
-        hours = res.toHoursPart();
         return hours;
     }
 
+    @JsonIgnore
     public Residente getResidente() {
         return residente;
     }
@@ -109,6 +109,7 @@ public class Entrada implements Serializable {
         this.residente = residente;
     }
 
+    @JsonIgnore
     public Oficial getOficial() {
         return oficial;
     }
@@ -120,10 +121,14 @@ public class Entrada implements Serializable {
     public void setTotal(Double total) {
         this.total = total;
     }
+
     public Double getTotal() {
-        if(oficial!=null) return 0.0;
-        if(hours!= null) total = hours*10.0;
-        else return total;
+        if (oficial != null)
+            return 0.0;
+        if (hours != null)
+            total = hours * 10.0;
+        else
+            return total;
         return total;
     }
 

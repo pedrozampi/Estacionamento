@@ -1,7 +1,6 @@
 package com.pzampi.estacionamento.model;
 
 import java.io.Serializable;
-import java.time.Duration;
 import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
