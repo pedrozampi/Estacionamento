@@ -18,6 +18,7 @@ import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -80,5 +81,41 @@ public class AdmController {
         obj = residenteService.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
+
+    @PutMapping("/saida/{id}")
+    public ResponseEntity<Entrada> saida(@PathVariable Long id){
+        Entrada obj = entradaService.saida(id);
+        return ResponseEntity.ok().body(obj);
+    }
+
+    @PutMapping("/saida/undo/{id}")
+    public ResponseEntity<Entrada> undsaida(@PathVariable Long id){
+        Entrada obj = entradaService.resetSaida(id);
+        return ResponseEntity.ok().body(obj);
+    }
+
+
+    @DeleteMapping("/oficial/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        oficialService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/residente/{id}")
+    public ResponseEntity<Void> deleteResidente(@PathVariable Long id){
+        residenteService.delete(id);;
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/entrada/{id}")
+    public ResponseEntity<Void> deleteEntrada(@PathVariable Long id){
+        entradaService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
     
+    @DeleteMapping("/startmonth")
+    public ResponseEntity<Void> startMonth(){
+        entradaService.startMonth();
+        return ResponseEntity.noContent().build();
+    }
 }
